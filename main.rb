@@ -41,7 +41,7 @@ def download_chart start_date, end_date, currency_pair
 end	
 
 def get_month_avg mon, year
-	start_date = Date.new(year, mon, 1)
+	start_date = DateTime.new(year, mon, 1)
 	end_date = start_date.next_month
 
 	btc = download_chart(start_date, end_date, "BTC_DCR")
@@ -56,12 +56,10 @@ def get_month_avg mon, year
 		dcr_usd.push(btc_avg * usd_avg)
 	end
 
-	month_avg = sprintf('%.3f', dcr_usd.avg)
+	month_avg = sprintf('%.4f', dcr_usd.avg)
 	$l.info "#{month_avg} USD/DCR (#{mon}-#{year})"
 end
 
-get_month_avg(12, 2016)
-get_month_avg(1, 2017)
 get_month_avg(2, 2017)
 get_month_avg(3, 2017)
 get_month_avg(4, 2017)
