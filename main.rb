@@ -1,18 +1,10 @@
 require 'net/http'
 require 'json'
-require 'date' 
-require 'logger' 
+require 'date'
 
 class Array;
 	def sum; inject(nil) { |sum,x| sum ? sum + x : x }; end;
 	def avg; sum / size; end; 
-end
-
-$l = Logger.new(STDOUT)
-$l.level = Logger::INFO
-$l.formatter = proc do |severity, date, p, msg|
-   "[#{severity}] #{msg}\n"
-   #"#{date.strftime('%Y-%m-%d %H:%M:%S')}: [#{severity}] #{msg}\n"
 end
 
 def download_chart start_date, end_date, currency_pair
@@ -27,7 +19,7 @@ def download_chart start_date, end_date, currency_pair
 		"period"       => 900,
 	})
 
-	$l.debug(uri.request_uri)
+	# puts uri.request_uri
 
 	http = Net::HTTP.new(uri.host, uri.port)
 	http.use_ssl = true
@@ -57,9 +49,30 @@ def get_month_avg mon, year
 	end
 
 	month_avg = sprintf('%.4f', dcr_usd.avg)
-	$l.info "#{month_avg} USD/DCR (#{mon}-#{year})"
+	puts "#{month_avg} USD/DCR (#{mon}-#{year})"
 end
 
-get_month_avg(2, 2017)
-get_month_avg(3, 2017)
-get_month_avg(4, 2017)
+# get_month_avg(3, 2017)
+# get_month_avg(4, 2017)
+# get_month_avg(5, 2017)
+# get_month_avg(6, 2017)
+# get_month_avg(7, 2017)
+# get_month_avg(8, 2017)
+# get_month_avg(9, 2017)
+# get_month_avg(10, 2017)
+# get_month_avg(11, 2017)
+# get_month_avg(12, 2017)
+# get_month_avg(1, 2018)
+# get_month_avg(2, 2018)
+# get_month_avg(3, 2018)
+# get_month_avg(4, 2018)
+# get_month_avg(5, 2018)
+# get_month_avg(6, 2018)
+# get_month_avg(7, 2018)
+# get_month_avg(8, 2018)
+# get_month_avg(9, 2018)
+# get_month_avg(10, 2018)
+# get_month_avg(11, 2018)
+# get_month_avg(12, 2018)
+# get_month_avg(1, 2019)
+get_month_avg(2, 2019)
