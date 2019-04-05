@@ -1,68 +1,23 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
+
+	"github.com/jholdstock/dcrwages/poloniex"
+	"github.com/jholdstock/dcrwages/server"
 )
 
-const poloURL = "https://poloniex.com/public"
-const httpTimeout = time.Second * 3
-const pricePeriod = 900
+// Scan from the present month until the month specified below.
+// For production these values should be 6 and 2016.
+// BTC/DCR data is not available on Polo before this time.
+const earliestMonth = 6
+const earliestYear = 2016
 
-type poloChartData struct {
-	Date            uint64  `json:"date"`
-	WeightedAverage float64 `json:"weightedAverage"`
-}
-
-// downloadPrices returns a map of unix timestamps => average price
-func downloadPrices(pairing string, startDate int64, endDate int64) (map[uint64]float64, error) {
-	// Construct HTTP request and set parameters
-	req, err := http.NewRequest(http.MethodGet, poloURL, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	q := req.URL.Query()
-	q.Set("command", "returnChartData")
-	q.Set("currencyPair", pairing)
-	q.Set("start", strconv.FormatInt(startDate, 10))
-	q.Set("end", strconv.FormatInt(endDate, 10))
-	q.Set("period", strconv.Itoa(pricePeriod))
-	req.URL.RawQuery = q.Encode()
-
-	// Create HTTP client,
-	httpClient := http.Client{
-		Timeout: httpTimeout,
-	}
-
-	// Send HTTP request
-	resp, err := httpClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	defer resp.Body.Close()
-
-	// Read response and deserialise JSON
-	decoder := json.NewDecoder(resp.Body)
-	var chartData []poloChartData
-	err = decoder.Decode(&chartData)
-	if err != nil {
-		return nil, err
-	}
-
-	// Create a map of unix timestamps => average price
-	prices := make(map[uint64]float64, len(chartData))
-	for _, data := range chartData {
-		prices[data.Date] = data.WeightedAverage
-	}
-
-	return prices, nil
-}
+// API settings
+const listen = ":3000"
 
 // getMonthAverage returns the average USD/DCR price for a given month
 func getMonthAverage(month time.Month, year int) (float64, error) {
@@ -73,13 +28,13 @@ func getMonthAverage(month time.Month, year int) (float64, error) {
 	unixEnd := endTime.Unix()
 
 	// Download BTC/DCR and USDT/BTC prices from Poloniex
-	dcrPrices, err := downloadPrices("BTC_DCR", unixStart, unixEnd)
+	dcrPrices, err := poloniex.GetPrices("BTC_DCR", unixStart, unixEnd)
 	if err != nil {
-		return -1, err
+		return 0, err
 	}
-	btcPrices, err := downloadPrices("USDT_BTC", unixStart, unixEnd)
+	btcPrices, err := poloniex.GetPrices("USDT_BTC", unixStart, unixEnd)
 	if err != nil {
-		return -1, err
+		return 0, err
 	}
 
 	// Create a map of unix timestamps => average price
@@ -101,60 +56,67 @@ func getMonthAverage(month time.Month, year int) (float64, error) {
 	}
 	average = average / float64(len(usdtDcrPrices))
 
-	return average, nil
-}
-
-// writeMonthAverage retrieves the average USD/DCR price for a
-// given month and then prints it to the terminal
-func writeMonthAverage(month time.Month, year int) {
-	avg, err := getMonthAverage(month, year)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	// Polo doesn't like >6 requests per second
 	time.Sleep(300 * time.Millisecond)
 
-	fmt.Printf("%.4f USDT/DCR (%d-%d)", avg, month, year)
-	fmt.Println()
+	return average, nil
 }
 
 func main() {
-	writeMonthAverage(6, 2016)
-	writeMonthAverage(7, 2016)
-	writeMonthAverage(8, 2016)
-	writeMonthAverage(9, 2016)
-	writeMonthAverage(10, 2016)
-	writeMonthAverage(11, 2016)
-	writeMonthAverage(12, 2016)
+	now := time.Now()
+	month, year := now.Month(), now.Year()
 
-	writeMonthAverage(1, 2017)
-	writeMonthAverage(2, 2017)
-	writeMonthAverage(3, 2017)
-	writeMonthAverage(4, 2017)
-	writeMonthAverage(5, 2017)
-	writeMonthAverage(6, 2017)
-	writeMonthAverage(7, 2017)
-	writeMonthAverage(8, 2017)
-	writeMonthAverage(9, 2017)
-	writeMonthAverage(10, 2017)
-	writeMonthAverage(11, 2017)
-	writeMonthAverage(12, 2017)
+	// Initialise API data model
+	server.FullHistory = server.PriceHistory{
+		Years: map[int]server.PriceYear{
+			year: {
+				Months: map[int]server.PriceMonth{},
+			},
+		},
+	}
 
-	writeMonthAverage(1, 2018)
-	writeMonthAverage(2, 2018)
-	writeMonthAverage(3, 2018)
-	writeMonthAverage(4, 2018)
-	writeMonthAverage(5, 2018)
-	writeMonthAverage(6, 2018)
-	writeMonthAverage(7, 2018)
-	writeMonthAverage(8, 2018)
-	writeMonthAverage(9, 2018)
-	writeMonthAverage(10, 2018)
-	writeMonthAverage(11, 2018)
-	writeMonthAverage(12, 2018)
+	// Starting with the current month, calculate monthly average
+	// prices until the end date specified in config
+	completeMonth := false
+	for {
+		// Get the month's average USDT/DCR price
+		average, err := getMonthAverage(month, year)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	writeMonthAverage(1, 2019)
-	writeMonthAverage(2, 2019)
-	writeMonthAverage(3, 2019)
+		fmt.Printf("%.4f USDT/DCR (%d-%d)", average, month, year)
+		fmt.Println()
+
+		// Store the price in the API data model
+		server.FullHistory.Years[year].Months[int(month)] = server.PriceMonth{
+			AveragePrice:  average,
+			CompleteMonth: completeMonth,
+		}
+
+		// Stop if month/year specified in config
+		if month == earliestMonth && year == earliestYear {
+			break
+		}
+
+		// Proceed to the next month
+		completeMonth = true
+		month--
+		// If required, roll over to a new year
+		if month == 0 {
+			month = 12
+			year--
+			server.FullHistory.Years[year] = server.PriceYear{
+				Months: map[int]server.PriceMonth{},
+			}
+		}
+	}
+
+	// Start API server
+	var router = server.NewRouter()
+
+	fmt.Printf("Starting API server on \"%s\"", listen)
+	fmt.Println()
+
+	log.Fatal(http.ListenAndServe(listen, router))
 }
