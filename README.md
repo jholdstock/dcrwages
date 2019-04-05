@@ -1,5 +1,6 @@
 # dcrwages
 
+[![Build Status](https://travis-ci.org/jholdstock/dcrwages.png?branch=master)](https://travis-ci.org/jholdstock/dcrwages)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
 
 dcrwages calculates average monthly USDT/DCR price and writes it to the terminal.
