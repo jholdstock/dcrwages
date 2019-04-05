@@ -39,11 +39,17 @@ Once the data is obtained, the API server will start listening on port 3000:
 
 ## REST API
 
-Months are represented by numbers. 1 = Jan, 2 = Feb...
-
 | HTTP Request            | Response                 |
 |-------------------------|--------------------------|
 | `/prices`               | All available prices     |
 | `/prices/{year}`        | Prices for a single year |
 | `/prices/{year}/{month}`| Price for a single month |
 
+Months are represented by numbers. 1 = Jan, 2 = Feb...
+
+Errors are indicated using HTTP status codes and an error description in the response body.
+For example, a request for data which is unavailble will give a `400` HTTP status with the following body:
+
+```json
+{"error":"No data for year 1966"}
+```
