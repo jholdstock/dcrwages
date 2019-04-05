@@ -13,8 +13,8 @@ import (
 // Scan from the present month until the month specified below.
 // For production these values should be 6 and 2016.
 // BTC/DCR data is not available on Polo before this time.
-const earliestMonth = 6
-const earliestYear = 2016
+const earliestMonth = 11
+const earliestYear = 2018
 
 // API settings
 const listen = ":3000"
