@@ -20,7 +20,7 @@ def download_chart start_date, end_date, currency_pair
 	})
 
 	# puts uri.request_uri
-
+	
 	http = Net::HTTP.new(uri.host, uri.port)
 	http.use_ssl = true
 	request = Net::HTTP::Get.new(uri.request_uri)
@@ -41,8 +41,8 @@ def get_month_avg mon, year
 	dcr_usdt = []
 	
 	[btc.length, usdt.length].min.times do |i|
-		btc_avg = [btc[i]["high"], btc[i]["low"]].avg
-		usdt_avg = [usdt[i]["high"], usdt[i]["low"]].avg
+		btc_avg = btc[i]["weightedAverage"]
+		usdt_avg = usdt[i]["weightedAverage"]
 		
 		dcr_usdt.push(btc_avg * usdt_avg)
 	end
@@ -52,27 +52,39 @@ def get_month_avg mon, year
 	sleep 0.3 # Polo doesn't like >6 requests per second
 end
 
-# get_month_avg(3, 2017)
-# get_month_avg(4, 2017)
-# get_month_avg(5, 2017)
-# get_month_avg(6, 2017)
-# get_month_avg(7, 2017)
-# get_month_avg(8, 2017)
-# get_month_avg(9, 2017)
-# get_month_avg(10, 2017)
-# get_month_avg(11, 2017)
-# get_month_avg(12, 2017)
-# get_month_avg(1, 2018)
-# get_month_avg(2, 2018)
-# get_month_avg(3, 2018)
-# get_month_avg(4, 2018)
-# get_month_avg(5, 2018)
-# get_month_avg(6, 2018)
-# get_month_avg(7, 2018)
-# get_month_avg(8, 2018)
-# get_month_avg(9, 2018)
-# get_month_avg(10, 2018)
-# get_month_avg(11, 2018)
-# get_month_avg(12, 2018)
-# get_month_avg(1, 2019)
+get_month_avg(6, 2016)
+get_month_avg(7, 2016)
+get_month_avg(8, 2016)
+get_month_avg(9, 2016)
+get_month_avg(10, 2016)
+get_month_avg(11, 2016)
+get_month_avg(12, 2016)
+
+get_month_avg(1, 2017)
+get_month_avg(2, 2017)
+get_month_avg(3, 2017)
+get_month_avg(4, 2017)
+get_month_avg(5, 2017)
+get_month_avg(6, 2017)
+get_month_avg(7, 2017)
+get_month_avg(8, 2017)
+get_month_avg(9, 2017)
+get_month_avg(10, 2017)
+get_month_avg(11, 2017)
+get_month_avg(12, 2017)
+
+get_month_avg(1, 2018)
+get_month_avg(2, 2018)
+get_month_avg(3, 2018)
+get_month_avg(4, 2018)
+get_month_avg(5, 2018)
+get_month_avg(6, 2018)
+get_month_avg(7, 2018)
+get_month_avg(8, 2018)
+get_month_avg(9, 2018)
+get_month_avg(10, 2018)
+get_month_avg(11, 2018)
+get_month_avg(12, 2018)
+
+get_month_avg(1, 2019)
 get_month_avg(2, 2019)
