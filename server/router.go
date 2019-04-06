@@ -1,8 +1,9 @@
 package server
 
 import (
-	"github.com/gorilla/mux"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 type route struct {
@@ -44,7 +45,9 @@ var routes = []route{
 func NewRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("server/public"))))
+	router.PathPrefix("/css/").Handler(http.StripPrefix("/css", http.FileServer(http.Dir("server/public/css"))))
+	router.PathPrefix("/js/").Handler(http.StripPrefix("/js", http.FileServer(http.Dir("server/public/js"))))
+	router.PathPrefix("/images/").Handler(http.StripPrefix("/images", http.FileServer(http.Dir("server/public/images"))))
 
 	for _, route := range routes {
 		var handler http.Handler

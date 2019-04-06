@@ -1,0 +1,44 @@
+body {
+    background: #091440;
+}
+
+.top-bar {
+    width: 100%;
+}
+
+.top-bar-logo {
+    height: 70px;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.month-rows {
+    padding: 5px 10px;
+    background: #F9FAFA;
+    max-width: 400px;
+    margin: 10px auto;
+}
+
+.month-row {
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.year,
+.month {
+    max-width: 30px;
+}
+
+.price {
+    max-width: 200px;
+}

@@ -68,9 +68,9 @@ func main() {
 
 	// Initialise API data model
 	server.FullHistory = server.PriceHistory{
-		Years: map[int]server.PriceYear{
+		Years: map[int]server.Year{
 			year: {
-				Months: map[int]server.PriceMonth{},
+				Months: map[int]server.Month{},
 			},
 		},
 	}
@@ -89,7 +89,7 @@ func main() {
 		fmt.Println()
 
 		// Store the price in the API data model
-		server.FullHistory.Years[year].Months[int(month)] = server.PriceMonth{
+		server.FullHistory.Years[year].Months[int(month)] = server.Month{
 			AveragePrice:  average,
 			CompleteMonth: completeMonth,
 		}
@@ -106,8 +106,8 @@ func main() {
 		if month == 0 {
 			month = 12
 			year--
-			server.FullHistory.Years[year] = server.PriceYear{
-				Months: map[int]server.PriceMonth{},
+			server.FullHistory.Years[year] = server.Year{
+				Months: map[int]server.Month{},
 			}
 		}
 	}

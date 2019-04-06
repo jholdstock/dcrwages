@@ -3,21 +3,27 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
     <head>
-        <script type="text/javascript" src="public/index.js"></script>
-        <link rel="stylesheet" href="public/index.css" />
+        <script type="text/javascript" src="/js/index.js"></script>
+        <link rel="stylesheet" href="/css/vendor/normalize-8.0.1.css" />
+        <link rel="stylesheet" href="/css/index.css" />
+        <link rel="stylesheet" href="/css/fonts.css" />
 
         <title>dcrwages</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
 
     <body>
-        <h1>dcrwages</h1>
+        <header class="top-bar">
+            <img class="top-bar-logo" src="/images/decred-logo-transparent-bg-gradient.svg" />
+        </header>
 
         <div class="flex-col month-rows">
             {{range $year_id, $year := .FullHistory.Years}}
             {{range $month_id, $month := $year.Months}}
-                <div class="flex-row month-row" style="order: {{ $year_id }}-{{ $month_id }}">
-                    <div class="year" >{{ $year_id }}</div>
+                <div class="flex-row month-row">
                     <div class="month">{{ $month_id }}</div>
+                    <div class="year" >{{ $year_id }}</div>
                     <div class="price">{{ $month.AveragePrice }}</div>
                 </div>
             {{end}}
