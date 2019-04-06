@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <head>
+        <script type="text/javascript" src="public/index.js"></script>
+        <link rel="stylesheet" href="public/index.css" />
+
+        <title>dcrwages</title>
+    </head>
+
+    <body>
+        <h1>dcrwages</h1>
+
+        <div class="flex-col month-rows">
+            {{range $year_id, $year := .FullHistory.Years}}
+            {{range $month_id, $month := $year.Months}}
+                <div class="flex-row month-row" style="order: {{ $year_id }}-{{ $month_id }}">
+                    <div class="year" >{{ $year_id }}</div>
+                    <div class="month">{{ $month_id }}</div>
+                    <div class="price">{{ $month.AveragePrice }}</div>
+                </div>
+            {{end}}
+            {{end}}
+        </div>
+    </body>
+</html>

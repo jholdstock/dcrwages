@@ -14,21 +14,27 @@ type route struct {
 
 var routes = []route{
 	{
+		"homePage",
+		"GET",
+		"/",
+		homePage,
+	},
+	{
 		"getFullHistory",
 		"GET",
-		"/prices",
+		"/api/prices",
 		getFullHistory,
 	},
 	{
 		"getYear",
 		"GET",
-		"/prices/{year}",
+		"/api/prices/{year}",
 		getYear,
 	},
 	{
 		"getMonth",
 		"GET",
-		"/prices/{year}/{month}",
+		"/api/prices/{year}/{month}",
 		getMonth,
 	},
 }
@@ -37,6 +43,9 @@ var routes = []route{
 // a RESTful HTTP service returning JSON encoded price data
 func NewRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
+
+	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("server/public"))))
+
 	for _, route := range routes {
 		var handler http.Handler
 

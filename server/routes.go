@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
 	"strconv"
 
@@ -16,10 +17,21 @@ type errmsg struct {
 	Err string `json:"error"`
 }
 
+type indexContext struct {
+	FullHistory PriceHistory
+}
+
 func writeJSONResponse(w http.ResponseWriter, httpStatus int, i interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(httpStatus)
 	json.NewEncoder(w).Encode(i)
+}
+
+func homePage(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("server/views/index.html")
+	t.Execute(w, indexContext{
+		FullHistory: FullHistory,
+	})
 }
 
 func getIntParam(key string, w http.ResponseWriter, r *http.Request) (int, error) {

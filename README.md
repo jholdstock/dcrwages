@@ -4,7 +4,8 @@
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
 
 dcrwages calculates average monthly USDT/DCR price and writes it to the terminal.
-It then starts a web server which provides the price information via a RESTful HTTP interface.
+It then starts a web server with a HTML page displaying all of the price information,
+as well as providing the information over a RESTful HTTP interface.
 
 ## How dcrwages works
 
@@ -34,16 +35,16 @@ It will print the price information out to the console as it downloads.
 Poloniex only allows 6 HTTP requests on it's API per second, so collecting
 all of the data takes around 30 seconds.
 
-Once the data is obtained, the API server will start listening on port 3000:
-<http://localhost:3000/prices>
+Once the data is obtained, the web server will start listening on port 3000:
+<http://localhost:3000/>
 
 ## REST API
 
 | HTTP Request            | Response                 |
 |-------------------------|--------------------------|
-| `/prices`               | All available prices     |
-| `/prices/{year}`        | Prices for a single year |
-| `/prices/{year}/{month}`| Price for a single month |
+| `/api/prices`               | All available prices     |
+| `/api/prices/{year}`        | Prices for a single year |
+| `/api/prices/{year}/{month}`| Price for a single month |
 
 Months are represented by numbers. 1 = Jan, 2 = Feb...
 
