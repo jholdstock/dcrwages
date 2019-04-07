@@ -20,13 +20,13 @@ body {
     flex-direction: row;
 }
 
-.month-rows {
-    padding: 5px 10px;
-    background: #F9FAFA;
+.price-rows {
     max-width: 400px;
-    margin: 10px auto;
+    margin: auto;
+    padding-bottom: 30px;
 }
 
+.year-row,
 .month-row {
     width: 100%;
     justify-content: space-between;
@@ -34,11 +34,26 @@ body {
     padding-bottom: 5px;
 }
 
-.year,
-.month {
-    max-width: 30px;
+.year-row:not(:last-child) {
+    padding-top: 25px;
 }
 
-.price {
-    max-width: 200px;
+.month-row {
+    padding: 10px;
+    background: #F9FAFA;
+    margin: 10px;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+.price,
+.month {
+    text-align: center;
+    width: 50%;
+}
+
+.year {
+    color         : #2970FF;
+    font-size     : 34px;
+    font-weight: bold;
 }

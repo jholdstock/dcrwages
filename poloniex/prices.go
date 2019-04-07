@@ -16,10 +16,53 @@ type poloChartData struct {
 	WeightedAverage float64 `json:"weightedAverage"`
 }
 
+// GetMonthAverage returns the average USD/DCR price for a given month
+func GetMonthAverage(month time.Month, year int) (float64, error) {
+	startTime := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
+	endTime := startTime.AddDate(0, 1, 0)
+
+	unixStart := startTime.Unix()
+	unixEnd := endTime.Unix()
+
+	// Download BTC/DCR and USDT/BTC prices from Poloniex
+	dcrPrices, err := getPrices("BTC_DCR", unixStart, unixEnd)
+	if err != nil {
+		return 0, err
+	}
+	btcPrices, err := getPrices("USDT_BTC", unixStart, unixEnd)
+	if err != nil {
+		return 0, err
+	}
+
+	// Create a map of unix timestamps => average price
+	usdtDcrPrices := make(map[uint64]float64)
+
+	// Select only timestamps which appear in both charts to
+	// populate the result set. Multiply BTC/DCR rate by
+	// USDT/BTC rate to get USDT/DCR rate.
+	for timestamp, dcr := range dcrPrices {
+		if btc, ok := btcPrices[timestamp]; ok {
+			usdtDcrPrices[timestamp] = dcr * btc
+		}
+	}
+
+	// Calculate and return the average of all USDT/DCR prices
+	var average float64
+	for _, price := range usdtDcrPrices {
+		average += price
+	}
+	average = average / float64(len(usdtDcrPrices))
+
+	// Polo doesn't like >6 requests per second
+	time.Sleep(300 * time.Millisecond)
+
+	return average, nil
+}
+
 // GetPrices contacts the Poloniex API to download
 // price data for a given CC pairing. Returns a map
 // of unix timestamp => average price
-func GetPrices(pairing string, startDate int64, endDate int64) (map[uint64]float64, error) {
+func getPrices(pairing string, startDate int64, endDate int64) (map[uint64]float64, error) {
 	// Construct HTTP request and set parameters
 	req, err := http.NewRequest(http.MethodGet, poloURL, nil)
 	if err != nil {

@@ -18,15 +18,25 @@
             <img class="top-bar-logo" src="/images/decred-logo-transparent-bg-gradient.svg" />
         </header>
 
-        <div class="flex-col month-rows">
+        <div class="flex-col price-rows">
             {{range $year_id, $year := .FullHistory.Years}}
             {{range $month_id, $month := $year.Months}}
                 <div class="flex-row month-row">
-                    <div class="month">{{ $month_id }}</div>
-                    <div class="year" >{{ $year_id }}</div>
-                    <div class="price">{{ $month.AveragePrice }}</div>
+                    <div class="month">
+                        <code>
+                        {{ index $.MonthNames $month_id }}
+                        </code>
+                    </div>
+                    <div class="price">
+                        <code>
+                        {{ printf "%.2f" $month.AveragePrice }} USDT/DCR
+                        </code>
+                    </div>
                 </div>
             {{end}}
+            <div class="flex-row year-row">
+                <div class="year" >{{ $year_id }}</div>
+            </div>
             {{end}}
         </div>
     </body>
