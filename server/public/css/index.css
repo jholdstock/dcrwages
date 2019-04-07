@@ -10,6 +10,12 @@ body {
     height: 70px;
 }
 
+#chart-container {
+    width: 60vw;
+    height: 400px;
+    background: #1f325f;
+}
+
 .flex-col {
     display: flex;
     flex-direction: column-reverse;
@@ -17,21 +23,18 @@ body {
 
 .flex-row {
     display: flex;
+    justify-content: space-around;
     flex-direction: row;
 }
 
 .price-rows {
-    max-width: 400px;
-    margin: auto;
+    justify-content: space-between;
     padding-bottom: 30px;
 }
 
 .year-row,
 .month-row {
     width: 100%;
-    justify-content: space-between;
-    padding-top: 5px;
-    padding-bottom: 5px;
 }
 
 .year-row:not(:last-child) {
@@ -41,19 +44,28 @@ body {
 .month-row {
     padding: 10px;
     background: #F9FAFA;
-    margin: 10px;
-    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
     font-size: 18px;
 }
 
 .price,
 .month {
     text-align: center;
-    width: 50%;
 }
 
 .year {
     color         : #2970FF;
-    font-size     : 34px;
+    font-size     : 2em;
     font-weight: bold;
+}
+
+.noscript {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #F9FAFA;
 }

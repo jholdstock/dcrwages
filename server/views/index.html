@@ -3,10 +3,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
     <head>
+        <link rel="stylesheet" type="text/css" href="/css/vendor/normalize-8.0.1.css" />
+        <link rel="stylesheet" type="text/css" href="/css/index.css" />
+        <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+
+        <!-- Highchart -->
+        <script src="/js/vendor/highcharts-7.1.0.js"></script>
+        <!-- Highchart -->
+
         <script type="text/javascript" src="/js/index.js"></script>
-        <link rel="stylesheet" href="/css/vendor/normalize-8.0.1.css" />
-        <link rel="stylesheet" href="/css/index.css" />
-        <link rel="stylesheet" href="/css/fonts.css" />
 
         <title>dcrwages</title>
 
@@ -18,26 +23,85 @@
             <img class="top-bar-logo" src="/images/decred-logo-transparent-bg-gradient.svg" />
         </header>
 
-        <div class="flex-col price-rows">
-            {{range $year_id, $year := .FullHistory.Years}}
-            {{range $month_id, $month := $year.Months}}
-                <div class="flex-row month-row">
-                    <div class="month">
-                        <code>
-                        {{ index $.MonthNames $month_id }}
-                        </code>
+        <div class="flex-row">
+            <div class="flex-col price-rows">
+                {{range $year_id, $year := .FullHistory.Years}}
+                {{range $month_id, $month := $year.Months}}
+                    <div class="flex-row month-row">
+                        <div class="month">
+                            <code>
+                            {{ index $.MonthNames $month_id }}
+                            </code>
+                        </div>
+                        <div class="price">
+                            <code>
+                            {{ printf "%.2f" $month.AveragePrice }}&nbsp;USDT/DCR
+                            </code>
+                        </div>
                     </div>
-                    <div class="price">
-                        <code>
-                        {{ printf "%.2f" $month.AveragePrice }} USDT/DCR
-                        </code>
-                    </div>
+                {{end}}
+                <div class="year-row">
+                    <div class="year" >{{ $year_id }}</div>
                 </div>
-            {{end}}
-            <div class="flex-row year-row">
-                <div class="year" >{{ $year_id }}</div>
+                {{end}}
             </div>
-            {{end}}
+
+            <div id="chart-container">
+                <noscript>
+                    <div class="noscript">
+                        Enable JavaScript to view price chart
+                    </div>
+                </noscript>
+            </div>
         </div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var myChart = Highcharts.chart('chart-container', {
+                chart: {
+                    zoomType: 'x'
+                },
+                title: {
+                    text: 'USDT/DCR Monthly average'
+                },
+                subtitle: {
+                text: document.ontouchstart === undefined ?
+                        'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+                },
+                xAxis: {
+                    categories: [
+                        {{range $year_id, $year := .FullHistory.Years}}
+                        {{range $month_id, $month := $year.Months}}
+                        '{{ index $.MonthNames $month_id }} {{$year_id}}',
+                        {{end}}
+                        {{end}}
+                        ]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Monthly Average (USDT/DCR)'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    headerFormat: '{point.key}<br/>',
+                    pointFormat: '<b>{point.y}</b> USDT/DCR'
+                },
+                series: [{
+                    name: 'USDT/DCR',
+                    data: [
+                        {{range $year_id, $year := .FullHistory.Years}}
+                        {{range $month_id, $month := $year.Months}}
+                        parseFloat({{ printf "%.2f" $month.AveragePrice }}),
+                        {{end}}
+                        {{end}}
+                    ]
+                }]
+            });
+        });
+        </script>
+        
     </body>
 </html>
