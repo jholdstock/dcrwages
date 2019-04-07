@@ -7,9 +7,7 @@
         <link rel="stylesheet" type="text/css" href="/css/index.css" />
         <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
 
-        <!-- Highchart -->
         <script src="/js/vendor/highcharts-7.1.0.js"></script>
-        <!-- Highchart -->
 
         <script type="text/javascript" src="/js/index.js"></script>
 
@@ -23,25 +21,49 @@
             <img class="top-bar-logo" src="/images/decred-logo-transparent-bg-gradient.svg" />
         </header>
 
-        <div class="flex-row">
-            <div class="flex-col price-rows">
+        <div class="flex-row main-wrapper">
+            <div class="flex-col">
                 {{range $year_id, $year := .FullHistory.Years}}
-                {{range $month_id, $month := $year.Months}}
-                    <div class="flex-row month-row">
-                        <div class="month">
-                            <code>
-                            {{ index $.MonthNames $month_id }}
-                            </code>
+                                
+                <div class="wrap-collapsible" style="order:-{{$year_id}}">
+                <input id="collapsible-{{$year_id}}" class="toggle" type="checkbox" {{if eq $year_id $.CurrentYear}}checked{{end}}>
+                <label for="collapsible-{{$year_id}}" class="lbl-toggle">{{$year_id}}</label>
+                <div class="collapsible-content">
+                    {{range $month_id, $month := $year.Months}}
+                    <div class="flex-row month-info">
+                        <div class="flex-row month-row">
+                            <div class="month">
+                                <code>
+                                {{ index $.MonthNames $month_id }}
+                                </code>
+                            </div>
+                            <div class="price">
+                                <code>
+                                {{ printf "%.2f" $month.AveragePrice }}
+                                </code>
+                            </div>
+                            <div class="usdtdcr">
+                                <code>
+                                USDT/DCR
+                                </code>
+                            </div>
                         </div>
-                        <div class="price">
-                            <code>
-                            {{ printf "%.2f" $month.AveragePrice }}&nbsp;USDT/DCR
-                            </code>
+
+                        {{if eq $year_id $.CurrentYear}}
+                        {{if eq $month_id $.CurrentMonth}}
+                        <div class="btn btn-primary tooltip info">
+                            <img class="info" src="/images/info.svg" />
+                            <div class="right">
+                                <h3>{{ index $.MonthNames $month_id }} is the current month</h3>
+                                <p>{{ printf "%.2f" $month.AveragePrice }} USDT/DCR is the average price for {{ index $.MonthNames $month_id }} so far.</p>
+                            </div>
                         </div>
+
+                        {{end}}
+                        {{end}}
                     </div>
-                {{end}}
-                <div class="year-row">
-                    <div class="year" >{{ $year_id }}</div>
+                    {{end}}
+                </div>
                 </div>
                 {{end}}
             </div>
