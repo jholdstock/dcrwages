@@ -150,9 +150,11 @@ input[type='checkbox'] {
 }
 
 .tooltip .right {
+    padding: 5px;
+    font-size: 0.8em;
     color: #0e152f;
     text-align: center;
-    min-width: 230px; 
+    white-space: nowrap;
     top: 50%;
     left: 100%;
     margin-left: 15px;

@@ -22,12 +22,24 @@ dcrwages was written with Go 1.12.
 
 ## How to use dcrwages
 
+Build and run locally:
+
 ```bash
 # Build the executable
 env GO111MODULE=on go install .
 
 # Run the executable
 $(go env GOPATH)/bin/dcrwages
+```
+
+Or build and run in docker:
+
+```bash
+# Build the container
+docker build -t jholdstock/dcrwages .
+
+# Run the container
+docker run -d -p 3000:3000 jholdstock/dcrwages
 ```
 
 The process will begin contacting Poloniex and downloading price information.

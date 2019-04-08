@@ -27,8 +27,7 @@
             <div class="flex-col">
                 <div class="intro-text" style="order: -9999;">
                     <p>dcrwages uses data from Poloniex to calculate a monthly average USDT/DCR rate.</p>
-                    <p>This rate is used when Decred contractors submit invoices denominated in US Dollars and receive payment in Decred.
-                    It is calculated using BTC/DCR and USDT/BTC price information over 15 minute intervals.</p>
+                    <p>This rate is used when Decred contractors submit invoices denominated in US Dollars and receive payment in Decred.</p>
                     <h2>Current Month:</h2>
                     <div class="flex-row month-info">
                         <div class="flex-row month-row">
@@ -52,8 +51,8 @@
                             <div class="btn btn-primary tooltip info">
                                 <img class="info" src="/images/info.svg" />
                                 <div class="right">
-                                    <p>This is the average price for {{ index $.MonthNames .CurrentMonth }} so far.</p>
-                                    <p>Last updated {{$.LastUpdated}}.</p>
+                                    This is the average price for {{ index $.MonthNames .CurrentMonth }} so far.<br />
+                                    Last updated {{$.LastUpdated}}.
                                 </div>
                             </div>
                         </div>
