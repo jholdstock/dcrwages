@@ -23,14 +23,50 @@
 
         <div class="flex-row main-wrapper">
             <div class="flex-col">
+                <div class="intro-text" style="order: -9999;">
+                    <p>dcrwages uses data from Poloniex to calculate a monthly average USDT/DCR rate.</p>
+                    <p>This rate is used when Decred contractors submit invoices denominated in US Dollars and receive payment in Decred.
+                    It is calculated using BTC/DCR and USDT/BTC price information over 15 minute intervals.</p>
+                    <h2>Current Month:</h2>
+                    <div class="flex-row month-info">
+                        <div class="flex-row month-row">
+                                <div class="month">
+                                    <code>
+                                    {{ index $.MonthNames .CurrentMonth }}
+                                    </code>
+                                </div>
+                                <div class="price">
+                                    <code>
+                                    {{printf "%.2f" (index (index .FullHistory.Years .CurrentYear).Months .CurrentMonth).AveragePrice}}
+                                    </code>
+                                </div>
+                                <div class="usdtdcr">
+                                    <code>
+                                    USDT/DCR
+                                    </code>
+                                </div>
+                            </div>
+
+                            <div class="btn btn-primary tooltip info">
+                                <img class="info" src="/images/info.svg" />
+                                <div class="right">
+                                    <p>This is the average price for {{ index $.MonthNames .CurrentMonth }} so far. It will update hourly.</p>
+                                </div>
+                            </div>
+                        </div>
+                    <p>Monthly rates dating back to June 2016 are provided below. Poloniex does not have BTC/USDT data before this time.</p>
+                </div>
+
+                
                 {{range $year_id, $year := .FullHistory.Years}}
                                 
                 <div class="wrap-collapsible" style="order:-{{$year_id}}">
-                <input id="collapsible-{{$year_id}}" class="toggle" type="checkbox" {{if eq $year_id $.CurrentYear}}checked{{end}}>
+                <input id="collapsible-{{$year_id}}" class="toggle" type="checkbox">
                 <label for="collapsible-{{$year_id}}" class="lbl-toggle">{{$year_id}}</label>
                 <div class="collapsible-content">
                     {{range $month_id, $month := $year.Months}}
-                    <div class="flex-row month-info">
+                        {{if and (eq $year_id $.CurrentYear) (eq $month_id $.CurrentMonth)}}
+                        {{else}}
                         <div class="flex-row month-row">
                             <div class="month">
                                 <code>
@@ -48,20 +84,7 @@
                                 </code>
                             </div>
                         </div>
-
-                        {{if eq $year_id $.CurrentYear}}
-                        {{if eq $month_id $.CurrentMonth}}
-                        <div class="btn btn-primary tooltip info">
-                            <img class="info" src="/images/info.svg" />
-                            <div class="right">
-                                <h3>{{ index $.MonthNames $month_id }} is the current month</h3>
-                                <p>{{ printf "%.2f" $month.AveragePrice }} USDT/DCR is the average price for {{ index $.MonthNames $month_id }} so far.</p>
-                            </div>
-                        </div>
-
                         {{end}}
-                        {{end}}
-                    </div>
                     {{end}}
                 </div>
                 </div>
