@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/jholdstock/dcrwages/model"
 )
 
 type errmsg struct {
@@ -35,10 +36,10 @@ func getIntParam(key string, w http.ResponseWriter, r *http.Request) (int, error
 }
 
 // Return all available data, json encoded
-func getFullHistory(w http.ResponseWriter, r *http.Request) {
+func getAllData(w http.ResponseWriter, r *http.Request) {
 	writeJSONResponse(w,
 		http.StatusOK,
-		FullHistory)
+		model.FullHistory)
 }
 
 // Return a single year, json encoded
@@ -48,7 +49,7 @@ func getYear(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if _, found := FullHistory.Years[year]; !found {
+	if _, found := model.FullHistory.Years[year]; !found {
 		writeJSONResponse(w,
 			http.StatusNotFound,
 			errmsg{
@@ -60,7 +61,7 @@ func getYear(w http.ResponseWriter, r *http.Request) {
 
 	writeJSONResponse(w,
 		http.StatusOK,
-		FullHistory.Years[year])
+		model.FullHistory.Years[year])
 }
 
 // Return a single month, json encoded
@@ -70,7 +71,7 @@ func getMonth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if _, found := FullHistory.Years[year]; !found {
+	if _, found := model.FullHistory.Years[year]; !found {
 		writeJSONResponse(w,
 			http.StatusNotFound,
 			errmsg{
@@ -85,7 +86,7 @@ func getMonth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if _, found := FullHistory.Years[year].Months[month]; !found {
+	if _, found := model.FullHistory.Years[year].Months[month]; !found {
 		writeJSONResponse(w,
 			http.StatusNotFound,
 			errmsg{
@@ -97,5 +98,5 @@ func getMonth(w http.ResponseWriter, r *http.Request) {
 
 	writeJSONResponse(w,
 		http.StatusOK,
-		FullHistory.Years[year].Months[month])
+		model.FullHistory.Years[year].Months[month])
 }

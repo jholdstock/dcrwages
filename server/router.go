@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/jholdstock/dcrwages/model"
 )
 
 type route struct {
@@ -24,10 +25,10 @@ var routes = []route{
 
 var apiRoutes = []route{
 	{
-		"getFullHistory",
+		"getAllData",
 		"GET",
 		"/api/prices",
-		getFullHistory,
+		getAllData,
 	},
 	{
 		"getYear",
@@ -91,15 +92,15 @@ func NewRouter() *mux.Router {
 // HTTP status if the data model is not yet loaded.
 func initChecker(inner http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if len(FullHistory.Years) == 0 {
+		if model.Initialised {
+			inner.ServeHTTP(w, r)
+		} else {
 			writeJSONResponse(w,
 				http.StatusServiceUnavailable,
 				errmsg{
 					"dcrwages is initialising",
 				},
 			)
-		} else {
-			inner.ServeHTTP(w, r)
 		}
 	})
 }

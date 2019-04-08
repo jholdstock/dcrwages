@@ -1,12 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"time"
 
-	"github.com/jholdstock/dcrwages/poloniex"
+	"github.com/jholdstock/dcrwages/model"
 	"github.com/jholdstock/dcrwages/server"
 )
 
@@ -19,66 +18,22 @@ const earliestYear = 2016
 // API settings
 const listen = ":3000"
 
-func populateDataModel() {
-	fmt.Println("Collecting historic data...")
-	now := time.Now()
-	month, year := now.Month(), now.Year()
+func main() {
+	// Load data model
+	go model.Init(earliestMonth, earliestYear)
 
-	// Build API data model
-	fullHistory := server.PriceHistory{
-		Years: map[int]server.Year{
-			year: {
-				Months: map[int]server.Month{},
-			},
-		},
-	}
-
-	// Starting with the current month, calculate monthly average
-	// prices until the end date specified in config
-	completeMonth := false
-	for {
-		// Get the month's average USDT/DCR price
-		average, err := poloniex.GetMonthAverage(month, year)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		fmt.Printf("%.4f USDT/DCR (%d-%d)", average, month, year)
-		fmt.Println()
-
-		// Store the price in the API data model
-		fullHistory.Years[year].Months[int(month)] = server.Month{
-			AveragePrice:  average,
-			CompleteMonth: completeMonth,
-		}
-
-		// Stop if month/year specified in config
-		if month == earliestMonth && year == earliestYear {
-			break
-		}
-
-		// Proceed to the next month
-		completeMonth = true
-		month--
-		// If required, roll over to a new year
-		if month == 0 {
-			month = 12
-			year--
-			fullHistory.Years[year] = server.Year{
-				Months: map[int]server.Month{},
+	// Start a ticker to update data model
+	ticker := time.NewTicker(30 * time.Minute)
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				model.Refresh()
 			}
 		}
-	}
+	}()
 
-	server.FullHistory = fullHistory
-	fmt.Println("Initialisation completed.")
-}
-
-func main() {
-	go populateDataModel()
-
-	// Start API server
-	fmt.Printf("Listening on \"%s\"", listen)
-	fmt.Println()
+	// Start HTTP server
+	log.Printf("Listening on \"%s\"", listen)
 	log.Fatal(http.ListenAndServe(listen, server.NewRouter()))
 }

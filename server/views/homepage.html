@@ -23,7 +23,7 @@
 
         <div class="flex-row main-wrapper">
             
-            {{ if not (eq (len $.FullHistory.Years) 0) }}
+            {{ if $.Initialised }}
             <div class="flex-col">
                 <div class="intro-text" style="order: -9999;">
                     <p>dcrwages uses data from Poloniex to calculate a monthly average USDT/DCR rate.</p>
@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="price">
                                     <code>
-                                    {{printf "%.2f" (index (index .FullHistory.Years .CurrentYear).Months .CurrentMonth).AveragePrice}}
+                                    {{printf "%.2f" (index (index .PriceData.Years .CurrentYear).Months .CurrentMonth).AveragePrice}}
                                     </code>
                                 </div>
                                 <div class="usdtdcr">
@@ -52,7 +52,8 @@
                             <div class="btn btn-primary tooltip info">
                                 <img class="info" src="/images/info.svg" />
                                 <div class="right">
-                                    <p>This is the average price for {{ index $.MonthNames .CurrentMonth }} so far. It will update hourly.</p>
+                                    <p>This is the average price for {{ index $.MonthNames .CurrentMonth }} so far.</p>
+                                    <p>Last updated {{$.LastUpdated}}.</p>
                                 </div>
                             </div>
                         </div>
@@ -60,7 +61,7 @@
                 </div>
 
                 
-                {{range $year_id, $year := .FullHistory.Years}}
+                {{range $year_id, $year := .PriceData.Years}}
                                 
                 <div class="wrap-collapsible" style="order:-{{$year_id}}">
                 <input id="collapsible-{{$year_id}}" class="toggle" type="checkbox">
@@ -96,7 +97,7 @@
             {{end}}
 
             <div id="chart-container">
-                {{ if eq (len $.FullHistory.Years) 0 }}
+                {{ if not $.Initialised }}
                     <div class="center-msg">
                         dcrwages is initialising....
                     </div>
@@ -110,7 +111,7 @@
             </div>
         </div>
 
-        {{ if not (eq (len $.FullHistory.Years) 0) }}
+        {{ if $.Initialised }}
         <script>
         document.addEventListener('DOMContentLoaded', function () {
             var myChart = Highcharts.chart('chart-container', {
@@ -126,7 +127,7 @@
                 },
                 xAxis: {
                     categories: [
-                        {{range $year_id, $year := .FullHistory.Years}}
+                        {{range $year_id, $year := .PriceData.Years}}
                         {{range $month_id, $month := $year.Months}}
                         '{{ printf "%.3s" (index $.MonthNames $month_id) }} {{$year_id}}',
                         {{end}}
@@ -157,7 +158,7 @@
                 series: [{
                     name: 'USDT/DCR',
                     data: [
-                        {{range $year_id, $year := .FullHistory.Years}}
+                        {{range $year_id, $year := .PriceData.Years}}
                         {{range $month_id, $month := $year.Months}}
                         parseFloat({{ printf "%.2f" $month.AveragePrice }}),
                         {{end}}
