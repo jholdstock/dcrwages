@@ -15,10 +15,9 @@ body {
 
 #chart-container {
     width: 60vw;
-    height: 400px;
+    height: 500px;
     background: #1f325f;
 }
-
 
 .intro-text > p {
     color: #F9FAFA;

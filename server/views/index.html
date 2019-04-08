@@ -21,7 +21,7 @@
             <img class="top-bar-logo" src="/images/decred-logo-transparent-bg-gradient.svg" />
         </header>
 
-        <div class="flex-row main-wrapper">
+       <div class="flex-row main-wrapper">
             <div class="flex-col">
                 <div class="intro-text" style="order: -9999;">
                     <p>dcrwages uses data from Poloniex to calculate a monthly average USDT/DCR rate.</p>
@@ -91,7 +91,7 @@
                 {{end}}
             </div>
 
-            <div id="chart-container">
+           <div id="chart-container">
                 <noscript>
                     <div class="noscript">
                         Enable JavaScript to view price chart
@@ -111,20 +111,29 @@
                 },
                 subtitle: {
                 text: document.ontouchstart === undefined ?
-                        'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+                        'Click and drag to zoom in' : 'Pinch to zoom in'
                 },
                 xAxis: {
                     categories: [
                         {{range $year_id, $year := .FullHistory.Years}}
                         {{range $month_id, $month := $year.Months}}
-                        '{{ index $.MonthNames $month_id }} {{$year_id}}',
+                        '{{ printf "%.3s" (index $.MonthNames $month_id) }} {{$year_id}}',
                         {{end}}
                         {{end}}
-                        ]
+                    ],
+                    labels: {
+                        align: 'right',
+                        reserveSpace: true,
+                        rotation: 290
+                    },
+                    lineWidth: 0,
                 },
                 yAxis: {
                     title: {
-                        text: 'Monthly Average (USDT/DCR)'
+                        enabled: false
+                    },
+                    labels: {
+                        format: '${value}',
                     }
                 },
                 legend: {

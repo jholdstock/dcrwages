@@ -1,20 +1,20 @@
 Highcharts.theme = {
-    colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+    colors: ['#2ED6A1', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
         '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
     chart: {
         backgroundColor: "#1f325f",
-        plotBorderColor: '#606063'
+        plotBorderColor: 'green'
     },
     title: {
         style: {
-            color: '#E0E0E3',
+            color: '#F9FAFA',
             textTransform: 'uppercase',
             fontSize: '20px'
         }
     },
     subtitle: {
         style: {
-            color: '#E0E0E3',
+            color: '#F9FAFA',
             textTransform: 'uppercase'
         }
     },
@@ -22,7 +22,8 @@ Highcharts.theme = {
         gridLineColor: '#707073',
         labels: {
             style: {
-                color: '#E0E0E3'
+                color: '#F9FAFA',
+                fontSize: '14px'
             }
         },
         lineColor: '#707073',
@@ -30,8 +31,7 @@ Highcharts.theme = {
         tickColor: '#707073',
         title: {
             style: {
-                color: '#A0A0A3'
-
+                color: '#F9FAFA'
             }
         }
     },
@@ -39,7 +39,8 @@ Highcharts.theme = {
         gridLineColor: '#707073',
         labels: {
             style: {
-                color: '#E0E0E3'
+                color: '#F9FAFA',
+                fontSize: '18px'
             }
         },
         lineColor: '#707073',
@@ -48,12 +49,13 @@ Highcharts.theme = {
         tickWidth: 1,
         title: {
             style: {
-                color: '#A0A0A3'
+                color: '#F9FAFA',
+                fontSize: '16px'
             }
         }
     },
     tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+        backgroundColor: 'rgba(0, 0, 0, 0.30)',
         style: {
             color: '#F0F0F0'
         }
@@ -79,18 +81,13 @@ Highcharts.theme = {
     },
     legend: {
         itemStyle: {
-            color: '#E0E0E3'
+            color: '#F9FAFA'
         },
         itemHoverStyle: {
             color: '#FFF'
         },
         itemHiddenStyle: {
             color: '#606063'
-        }
-    },
-    credits: {
-        style: {
-            color: '#666'
         }
     },
     labels: {
