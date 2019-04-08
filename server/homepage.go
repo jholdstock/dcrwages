@@ -30,7 +30,7 @@ var monthNames = []string{
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("server/views/index.html")
+	t, _ := template.ParseFiles("server/views/homepage.html")
 	t.Execute(w, homepageContext{
 		FullHistory:  FullHistory,
 		MonthNames:   monthNames,

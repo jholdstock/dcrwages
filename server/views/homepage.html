@@ -21,7 +21,9 @@
             <img class="top-bar-logo" src="/images/decred-logo-transparent-bg-gradient.svg" />
         </header>
 
-       <div class="flex-row main-wrapper">
+        <div class="flex-row main-wrapper">
+            
+            {{ if not (eq (len $.FullHistory.Years) 0) }}
             <div class="flex-col">
                 <div class="intro-text" style="order: -9999;">
                     <p>dcrwages uses data from Poloniex to calculate a monthly average USDT/DCR rate.</p>
@@ -91,15 +93,24 @@
                 {{end}}
             </div>
 
-           <div id="chart-container">
-                <noscript>
-                    <div class="noscript">
-                        Enable JavaScript to view price chart
+            {{end}}
+
+            <div id="chart-container">
+                {{ if eq (len $.FullHistory.Years) 0 }}
+                    <div class="center-msg">
+                        dcrwages is initialising....
                     </div>
-                </noscript>
+                {{else}}
+                    <noscript>
+                        <div class="center-msg">
+                            Enable JavaScript to view price chart
+                        </div>
+                    </noscript>
+                {{end}}
             </div>
         </div>
 
+        {{ if not (eq (len $.FullHistory.Years) 0) }}
         <script>
         document.addEventListener('DOMContentLoaded', function () {
             var myChart = Highcharts.chart('chart-container', {
@@ -156,6 +167,7 @@
             });
         });
         </script>
+        {{end}}
         
     </body>
 </html>

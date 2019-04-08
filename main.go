@@ -20,11 +20,12 @@ const earliestYear = 2016
 const listen = ":3000"
 
 func populateDataModel() {
+	fmt.Println("Collecting historic data...")
 	now := time.Now()
 	month, year := now.Month(), now.Year()
 
-	// Initialise API data model
-	server.FullHistory = server.PriceHistory{
+	// Build API data model
+	fullHistory := server.PriceHistory{
 		Years: map[int]server.Year{
 			year: {
 				Months: map[int]server.Month{},
@@ -46,7 +47,7 @@ func populateDataModel() {
 		fmt.Println()
 
 		// Store the price in the API data model
-		server.FullHistory.Years[year].Months[int(month)] = server.Month{
+		fullHistory.Years[year].Months[int(month)] = server.Month{
 			AveragePrice:  average,
 			CompleteMonth: completeMonth,
 		}
@@ -63,21 +64,21 @@ func populateDataModel() {
 		if month == 0 {
 			month = 12
 			year--
-			server.FullHistory.Years[year] = server.Year{
+			fullHistory.Years[year] = server.Year{
 				Months: map[int]server.Month{},
 			}
 		}
 	}
+
+	server.FullHistory = fullHistory
+	fmt.Println("Initialisation completed.")
 }
 
 func main() {
-	populateDataModel()
+	go populateDataModel()
 
 	// Start API server
-	var router = server.NewRouter()
-
-	fmt.Printf("Starting API server on \"%s\"", listen)
+	fmt.Printf("Listening on \"%s\"", listen)
 	fmt.Println()
-
-	log.Fatal(http.ListenAndServe(listen, router))
+	log.Fatal(http.ListenAndServe(listen, server.NewRouter()))
 }
