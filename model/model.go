@@ -35,7 +35,7 @@ var LastUpdated time.Time
 
 // Init will initialise the data model with historic price data
 func Init(earliestMonth time.Month, earliestYear int) {
-	log.Println("Collecting historic data...")
+	log.Println("Retrieving historic data...")
 	now := time.Now()
 	month, year := now.Month(), now.Year()
 
@@ -43,8 +43,10 @@ func Init(earliestMonth time.Month, earliestYear int) {
 	// prices until the end date
 	completeMonth := false
 	for {
-		storeMonthInModel(month, year, completeMonth)
-
+		err := storeMonthInModel(month, year, completeMonth)
+		if err != nil {
+			log.Fatal("ERROR: Failed to retrieve history.")
+		}
 		// Stop if month/year
 		if month == earliestMonth && year == earliestYear {
 			break
@@ -92,18 +94,20 @@ func Refresh() {
 	storeMonthInModel(month, year, false)
 }
 
-func storeMonthInModel(month time.Month, year int, completeMonth bool) {
+func storeMonthInModel(month time.Month, year int, completeMonth bool) error {
+	// Get the month's average USDT/DCR price
+	average, err := poloniex.GetMonthAverage(month, year)
+	if err != nil {
+		log.Printf("ERROR: Failed to update month %2.d-%d", month, year)
+		log.Printf("%v", err)
+		return err
+	}
+
 	// Create the year if it doesn't already exist
 	if _, ok := FullHistory.Years[year]; !ok {
 		FullHistory.Years[year] = Year{
 			Months: make(map[int]Month),
 		}
-	}
-
-	// Get the month's average USDT/DCR price
-	average, err := poloniex.GetMonthAverage(month, year)
-	if err != nil {
-		log.Fatal(err)
 	}
 
 	m := Month{
@@ -115,4 +119,5 @@ func storeMonthInModel(month time.Month, year int, completeMonth bool) {
 	log.Printf("Storing rate for %2.d-%d: %.4f USDT/DCR", month, year, average)
 	LastUpdated = time.Now()
 	FullHistory.Years[year].Months[int(month)] = m
+	return nil
 }

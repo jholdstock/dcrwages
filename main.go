@@ -9,13 +9,12 @@ import (
 	"github.com/jholdstock/dcrwages/server"
 )
 
-// Scan from the present month until the month specified below.
 // For production these values should be 6 and 2016.
 // BTC/DCR data is not available on Polo before this time.
 const earliestMonth = 6
 const earliestYear = 2016
 
-// API settings
+const refreshRate = 30 * time.Minute
 const listen = ":3000"
 
 func main() {
@@ -23,7 +22,7 @@ func main() {
 	go model.Init(earliestMonth, earliestYear)
 
 	// Start a ticker to update data model
-	ticker := time.NewTicker(30 * time.Minute)
+	ticker := time.NewTicker(refreshRate)
 	go func() {
 		for {
 			select {
