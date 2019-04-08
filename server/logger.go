@@ -6,7 +6,9 @@ import (
 	"time"
 )
 
-func Logger(inner http.Handler, name string) http.Handler {
+// Logger is a HTTP handler which logs request information,
+// including execution time.
+func logger(inner http.Handler, name string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 

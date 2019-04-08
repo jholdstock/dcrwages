@@ -20,6 +20,9 @@ var routes = []route{
 		"/",
 		homePage,
 	},
+}
+
+var apiRoutes = []route{
 	{
 		"getFullHistory",
 		"GET",
@@ -45,15 +48,34 @@ var routes = []route{
 func NewRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.PathPrefix("/css/").Handler(http.StripPrefix("/css", http.FileServer(http.Dir("server/public/css"))))
-	router.PathPrefix("/js/").Handler(http.StripPrefix("/js", http.FileServer(http.Dir("server/public/js"))))
-	router.PathPrefix("/images/").Handler(http.StripPrefix("/images", http.FileServer(http.Dir("server/public/images"))))
+	router.PathPrefix("/css/").Handler(
+		http.StripPrefix("/css", http.FileServer(http.Dir("server/public/css"))))
+	router.PathPrefix("/js/").Handler(
+		http.StripPrefix("/js", http.FileServer(http.Dir("server/public/js"))))
+	router.PathPrefix("/images/").Handler(
+		http.StripPrefix("/images", http.FileServer(http.Dir("server/public/images"))))
 
+	// API router
+	for _, route := range apiRoutes {
+		var handler http.Handler
+
+		handler = route.HandlerFunc
+		handler = logger(handler, route.Name)
+		handler = initChecker(handler)
+
+		router.
+			Methods(route.Method).
+			Path(route.Pattern).
+			Name(route.Name).
+			Handler(handler)
+	}
+
+	// HTML routes
 	for _, route := range routes {
 		var handler http.Handler
 
 		handler = route.HandlerFunc
-		handler = Logger(handler, route.Name)
+		handler = logger(handler, route.Name)
 
 		router.
 			Methods(route.Method).
@@ -63,4 +85,21 @@ func NewRouter() *mux.Router {
 	}
 
 	return router
+}
+
+// initChecker is a HTTP handler for the JSON API. It returns a 503
+// HTTP status if the data model is not yet loaded.
+func initChecker(inner http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if len(FullHistory.Years) == 0 {
+			writeJSONResponse(w,
+				http.StatusServiceUnavailable,
+				errmsg{
+					"dcrwages is initialising",
+				},
+			)
+		} else {
+			inner.ServeHTTP(w, r)
+		}
+	})
 }

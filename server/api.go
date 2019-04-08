@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -15,7 +14,7 @@ type errmsg struct {
 }
 
 func writeJSONResponse(w http.ResponseWriter, httpStatus int, i interface{}) {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(httpStatus)
 	json.NewEncoder(w).Encode(i)
 }
@@ -35,27 +34,8 @@ func getIntParam(key string, w http.ResponseWriter, r *http.Request) (int, error
 	return value, nil
 }
 
-func checkAPIReadiness(w http.ResponseWriter, r *http.Request) error {
-	if len(FullHistory.Years) == 0 {
-		writeJSONResponse(w,
-			http.StatusServiceUnavailable,
-			errmsg{
-				"dcrwages is initialising",
-			},
-		)
-		return errors.New("dcrwages is initialising")
-	}
-
-	return nil
-}
-
 // Return all available data, json encoded
 func getFullHistory(w http.ResponseWriter, r *http.Request) {
-	err := checkAPIReadiness(w, r)
-	if err != nil {
-		return
-	}
-
 	writeJSONResponse(w,
 		http.StatusOK,
 		FullHistory)
@@ -63,11 +43,6 @@ func getFullHistory(w http.ResponseWriter, r *http.Request) {
 
 // Return a single year, json encoded
 func getYear(w http.ResponseWriter, r *http.Request) {
-	err := checkAPIReadiness(w, r)
-	if err != nil {
-		return
-	}
-
 	year, err := getIntParam("year", w, r)
 	if err != nil {
 		return
@@ -90,11 +65,6 @@ func getYear(w http.ResponseWriter, r *http.Request) {
 
 // Return a single month, json encoded
 func getMonth(w http.ResponseWriter, r *http.Request) {
-	err := checkAPIReadiness(w, r)
-	if err != nil {
-		return
-	}
-
 	year, err := getIntParam("year", w, r)
 	if err != nil {
 		return
