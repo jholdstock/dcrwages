@@ -7,6 +7,8 @@ dcrwages is a web application which provides average monthly USDT/DCR price.
 It starts a web server with a HTML page displaying the price information,
 as well as providing the information over a RESTful API.
 
+<http://dcrwages.jamieholdstock.com>
+
 ## How dcrwages works
 
 dcrwages calculates the average monthly price of Decred in USDT using price data
