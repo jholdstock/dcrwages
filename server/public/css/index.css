@@ -19,6 +19,19 @@ body {
     background: #1f325f;
 }
 
+a {
+    font-weight: bold;
+    text-decoration: none;
+}
+a:link,
+a:visited {
+    color: #69d5f7;
+}
+a:hover,
+a:active {
+    color: #e9f8fe;
+}
+
 .intro-text > p {
     color: #F9FAFA;
     font-size: 1.1em;
