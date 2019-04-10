@@ -1,6 +1,8 @@
 package model
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"time"
 
@@ -21,6 +23,29 @@ type Years map[int]Year
 
 type PriceHistory struct {
 	Years `json:"years"`
+}
+
+func (r PriceHistory) FindYear(yearParam int) (Year, error) {
+	year, found := r.Years[yearParam]
+	if !found {
+		return Year{}, errors.New(fmt.Sprintf("No data for year %d", yearParam))
+	}
+
+	return year, nil
+}
+
+func (r PriceHistory) FindMonth(yearParam int, monthParam int) (Month, error) {
+	year, err := r.FindYear(yearParam)
+	if err != nil {
+		return Month{}, err
+	}
+
+	month, found := year.Months[monthParam]
+	if !found {
+		return Month{}, errors.New(fmt.Sprintf("No data for month %d of year %d", monthParam, yearParam))
+	}
+
+	return month, nil
 }
 
 // FullHistory contains all of the historical price data

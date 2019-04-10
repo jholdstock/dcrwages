@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"time"
 
 	"github.com/jholdstock/dcrwages/model"
@@ -33,6 +32,6 @@ func main() {
 	}()
 
 	// Start HTTP server
-	log.Printf("Listening on \"%s\"", listen)
-	log.Fatal(http.ListenAndServe(listen, server.NewRouter()))
+	log.Printf("Listening on %s", listen)
+	log.Fatal(server.NewRouter().Run(listen))
 }

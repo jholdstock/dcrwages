@@ -2,21 +2,12 @@ package server
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/jholdstock/dcrwages/model"
 )
-
-type homepageContext struct {
-	PriceData    model.PriceHistory
-	Initialised  bool
-	MonthNames   []string
-	CurrentYear  int
-	CurrentMonth int
-	LastUpdated  string
-}
 
 var monthNames = []string{
 	"",
@@ -34,17 +25,16 @@ var monthNames = []string{
 	"December",
 }
 
-func homePage(w http.ResponseWriter, r *http.Request) {
+func homePage(c *gin.Context) {
 	duration := time.Since(model.LastUpdated)
 	lastUpdated := int(duration.Minutes())
 
-	t, _ := template.ParseFiles("server/views/homepage.html")
-	t.Execute(w, homepageContext{
-		PriceData:    model.FullHistory,
-		Initialised:  model.Initialised,
-		MonthNames:   monthNames,
-		CurrentYear:  time.Now().Year(),
-		CurrentMonth: int(time.Now().Month()),
-		LastUpdated:  fmt.Sprintf("%d minutes ago", lastUpdated),
+	c.HTML(http.StatusOK, "homepage.html", gin.H{
+		"PriceData":    model.FullHistory,
+		"Initialised":  model.Initialised,
+		"MonthNames":   monthNames,
+		"CurrentYear":  time.Now().Year(),
+		"CurrentMonth": int(time.Now().Month()),
+		"LastUpdated":  fmt.Sprintf("%d minutes ago", lastUpdated),
 	})
 }
