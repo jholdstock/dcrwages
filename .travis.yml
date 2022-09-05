@@ -1,7 +1,0 @@
-language: go
-go:
-  - 1.12.x
-sudo: false
-script:
-  - export GO111MODULE=on
-  - go build -v .

@@ -1,5 +1,5 @@
 # builder image
-FROM golang:1.12
+FROM golang:1.19
 
 LABEL description="dcrwages"
 LABEL version="1.0"
@@ -9,7 +9,8 @@ USER root
 RUN mkdir /app
 COPY . /app
 WORKDIR /app
-RUN go build
+RUN go build .
 
-EXPOSE 8000
+ENV GIN_MODE release
+EXPOSE 3000
 CMD ["/app/dcrwages"]
