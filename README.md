@@ -4,23 +4,30 @@
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
 
 dcrwages is a web application which provides average monthly USDT/DCR price.
-It starts a web server with a HTML page displaying the price information,
-as well as providing the information over a RESTful API.
+It starts a web server with a HTML page displaying the price information, as
+well as providing the information over an API.
 
 <http://dcrwages.jamieholdstock.com>
 
+This rate is used when Decred project contractors submit invoices denominated in
+US Dollars and receive payment in DCR.
+
 ## How dcrwages works
 
-dcrwages calculates the average monthly price of Decred in USDT using price data
-retrieved from [Poloniex](https://poloniex.com). The weighted average price over
-15 minute intervals on the USDT/BTC and BTC/USD markets are used to find
-the monthly average USDT_DCR price.
+### Before April 2019
 
-dcrwages collects price data starting with the current
-month and working back to June 2016.
-Data for DCR/BTC is not available on Poloniex before this time.
+Price data retrieved from [Poloniex](https://poloniex.com) was used to calculate
+the monthly price of Decred in USDT.
+The weighted average price over 15 minute intervals on the USDT/BTC and BTC/DCR
+markets were used to find monthly average USDT/DCR prices.
 
-dcrwages was written with Go 1.12.
+This historic data is now hard-coded in dcrwages - the Poloniex API is no longer
+used by this project.
+
+### Since April 2019
+
+The price calculation was updated to use [Binance](https://binance.com) instead
+of Poloniex, and the interval was changed from 15 minutes to 1 hour.
 
 ## How to use dcrwages
 
@@ -44,13 +51,10 @@ docker build -t jholdstock/dcrwages .
 docker run -d -p 3000:3000 jholdstock/dcrwages:latest
 ```
 
-The process will begin contacting Poloniex and downloading price information.
-Poloniex only allows 6 HTTP requests on it's API per second, so collecting
-all of the data takes around 30 seconds.
+The process will begin contacting Binance and downloading price information.
 
-The web server will start listening on port 3000. You can open the homepage
-in your browser
-<http://localhost:3000/>
+The web server will start listening on port 3000.
+You can open the homepage in your browser <http://localhost:3000/>.
 
 ## REST API
 
@@ -62,9 +66,11 @@ in your browser
 
 Months are handled as integers. 1 = Jan, 2 = Feb, etc.
 
-Errors are indicated using HTTP status codes and an error description in the response body.
-For example, a request for data which is unavailble will give a `404` HTTP status and the following body:
+Errors are indicated using HTTP status codes and an error description in the
+response body.
+For example, a request for data which is unavailble will give a `404` HTTP
+status and the following body:
 
 ```json
-{"error":"No data for year 1966"}
+{ "error": "No data for year 1966" }
 ```
