@@ -1,13 +1,13 @@
 # dcrwages
 
-[![Build Status](https://travis-ci.org/jholdstock/dcrwages.png?branch=master)](https://travis-ci.org/jholdstock/dcrwages)
+[![Build Status](https://github.com/jholdstock/dcrwages/workflows/Build%20and%20Test/badge.svg)](https://github.com/jholdstock/dcrwages/actions)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
 
 dcrwages is a web application which provides average monthly USDT/DCR price.
 It starts a web server with a HTML page displaying the price information, as
 well as providing the information over an API.
 
-<http://dcrwages.jamieholdstock.com>
+<http://dcrwages.jholdstock.uk>
 
 This rate is used when Decred project contractors submit invoices denominated in
 US Dollars and receive payment in DCR.

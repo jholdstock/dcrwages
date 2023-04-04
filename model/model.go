@@ -112,10 +112,10 @@ func Refresh() {
 			previousYear--
 		}
 
-		storeMonthInModel(previousMonth, previousYear, true)
+		_ = storeMonthInModel(previousMonth, previousYear, true)
 	}
 
-	storeMonthInModel(month, year, false)
+	_ = storeMonthInModel(month, year, false)
 }
 
 func storeMonthInModel(month time.Month, year int, completeMonth bool) error {

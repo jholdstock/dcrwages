@@ -24,10 +24,8 @@ func main() {
 	ticker := time.NewTicker(refreshRate)
 	go func() {
 		for {
-			select {
-			case <-ticker.C:
-				model.Refresh()
-			}
+			<-ticker.C
+			model.Refresh()
 		}
 	}()
 
