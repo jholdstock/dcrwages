@@ -62,35 +62,36 @@
 
                 
                 {{range $year_id, $year := .PriceData.Years}}
-                                
-                <div class="wrap-collapsible" style="order:-{{$year_id}}">
-                <input id="collapsible-{{$year_id}}" class="toggle" type="checkbox">
-                <label for="collapsible-{{$year_id}}" class="lbl-toggle">{{$year_id}}</label>
-                <div class="collapsible-content">
-                    {{range $month_id, $month := $year.Months}}
-                        {{if and (eq $year_id $.CurrentYear) (eq $month_id $.CurrentMonth)}}
-                        {{else}}
-                        <div class="flex-row month-row">
-                            <div class="month">
-                                <code>
-                                {{ index $.MonthNames $month_id }}
-                                </code>
+                    {{ if gt (len $year.Months) 1 }}
+                    <div class="wrap-collapsible" style="order:-{{$year_id}}">
+                    <input id="collapsible-{{$year_id}}" class="toggle" type="checkbox">
+                    <label for="collapsible-{{$year_id}}" class="lbl-toggle">{{$year_id}}</label>
+                    <div class="collapsible-content">
+                        {{range $month_id, $month := $year.Months}}
+                            {{if and (eq $year_id $.CurrentYear) (eq $month_id $.CurrentMonth)}}
+                            {{else}}
+                            <div class="flex-row month-row">
+                                <div class="month">
+                                    <code>
+                                    {{ index $.MonthNames $month_id }}
+                                    </code>
+                                </div>
+                                <div class="price">
+                                    <code>
+                                    {{ printf "%.2f" $month.AveragePrice }}
+                                    </code>
+                                </div>
+                                <div class="usdtdcr">
+                                    <code>
+                                    USDT/DCR
+                                    </code>
+                                </div>
                             </div>
-                            <div class="price">
-                                <code>
-                                {{ printf "%.2f" $month.AveragePrice }}
-                                </code>
-                            </div>
-                            <div class="usdtdcr">
-                                <code>
-                                USDT/DCR
-                                </code>
-                            </div>
-                        </div>
+                            {{end}}
                         {{end}}
+                    </div>
+                    </div>
                     {{end}}
-                </div>
-                </div>
                 {{end}}
             </div>
 
