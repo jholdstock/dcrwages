@@ -144,7 +144,7 @@ var poloPrices = map[int]map[int]float64{
 }
 
 const binanceURL = "https://api.binance.com"
-const httpTimeout = time.Second * 3
+const httpTimeout = time.Second * 10
 
 // GetMonthAverage returns the average USD/DCR price for a given month
 func GetMonthAverage(month time.Month, year int) (float64, error) {
