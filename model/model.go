@@ -119,7 +119,7 @@ func Refresh() {
 }
 
 func storeMonthInModel(month time.Month, year int, completeMonth bool) error {
-	// Get the month's average USDT/DCR price.
+	// Get the month's average DCR/USDT price.
 	average, err := poloniex.GetMonthAverage(month, year)
 	if err != nil {
 		log.Printf("ERROR: Failed to update month %2.d-%d", month, year)
@@ -140,7 +140,7 @@ func storeMonthInModel(month time.Month, year int, completeMonth bool) error {
 	}
 
 	// Store the price in the data model.
-	log.Printf("Storing rate for %2.d-%d: %.4f USDT/DCR", month, year, average)
+	log.Printf("Storing rate for %2.d-%d: $%.4f", month, year, average)
 	LastUpdated = time.Now()
 	FullHistory.Years[year].Months[int(month)] = m
 	return nil

@@ -26,7 +26,7 @@
             {{ if $.Initialised }}
             <div class="flex-col">
                 <div class="intro-text" style="order: -9999;">
-                    <p>dcrwages uses data from Binance to calculate a monthly average USDT/DCR rate.</p>
+                    <p>dcrwages uses data from Binance to calculate a monthly average DCR/USDT rate.</p>
                     <p>This rate is used when Decred project contractors submit invoices denominated in
                         US Dollars and receive payment in DCR.</p>
                     <h2>Current Month:</h2>
@@ -39,12 +39,7 @@
                                 </div>
                                 <div class="price">
                                     <code>
-                                    {{printf "%.2f" (index (index .PriceData.Years .CurrentYear).Months .CurrentMonth).AveragePrice}}
-                                    </code>
-                                </div>
-                                <div class="usdtdcr">
-                                    <code>
-                                    USDT/DCR
+                                    ${{printf "%.2f" (index (index .PriceData.Years .CurrentYear).Months .CurrentMonth).AveragePrice}}
                                     </code>
                                 </div>
                             </div>
@@ -78,12 +73,7 @@
                                 </div>
                                 <div class="price">
                                     <code>
-                                    {{ printf "%.2f" $month.AveragePrice }}
-                                    </code>
-                                </div>
-                                <div class="usdtdcr">
-                                    <code>
-                                    USDT/DCR
+                                    ${{ printf "%.2f" $month.AveragePrice }}
                                     </code>
                                 </div>
                             </div>
@@ -120,7 +110,7 @@
                     zoomType: 'x'
                 },
                 title: {
-                    text: 'USDT/DCR Monthly average'
+                    text: 'DCR/USDT Monthly average'
                 },
                 subtitle: {
                 text: document.ontouchstart === undefined ?
@@ -154,10 +144,10 @@
                 },
                 tooltip: {
                     headerFormat: '{point.key}<br/>',
-                    pointFormat: '<b>{point.y}</b> USDT/DCR'
+                    pointFormat: '<b>${point.y}</b>'
                 },
                 series: [{
-                    name: 'USDT/DCR',
+                    name: 'DCR/USDT',
                     data: [
                         {{range $year_id, $year := .PriceData.Years}}
                         {{range $month_id, $month := $year.Months}}

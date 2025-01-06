@@ -81,18 +81,13 @@ a:active {
 .price {
     font-size: 1.2em;
     font-weight: bold;
-    width: 20%;
-    text-align: right;
+    width: 50%;
+    text-align: center;
 }
 .month {
-    width: 40%;
+    width: 50%;
     text-align: center;
 }
-.usdtdcr {
-    width: 40%;
-    text-align: center;
-}
-
 .lbl-toggle {
     color         : #2970FF;
     font-size     : 2em;

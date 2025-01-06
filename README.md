@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/jholdstock/dcrwages/workflows/Build%20and%20Test/badge.svg)](https://github.com/jholdstock/dcrwages/actions)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
 
-dcrwages is a web application which provides average monthly USDT/DCR price.
+dcrwages is a web application which provides average monthly DCR/USDT price.
 It starts a web server with a HTML page displaying the price information, as
 well as providing the information over an API.
 
@@ -18,8 +18,8 @@ US Dollars and receive payment in DCR.
 
 Price data retrieved from [Poloniex](https://poloniex.com) was used to calculate
 the monthly price of Decred in USDT.
-The weighted average price over 15 minute intervals on the USDT/BTC and BTC/DCR
-markets were used to find monthly average USDT/DCR prices.
+The weighted average price over 15 minute intervals on the BTC/USDT and BTC/DCR
+markets were used to find monthly average DCR/USDT prices.
 
 This historic data is now hard-coded in dcrwages - the Poloniex API is no longer
 used by this project.
@@ -40,7 +40,7 @@ Build and run locally:
 
 ```bash
 # Build the executable
-env GO111MODULE=on go install .
+go install .
 
 # Run the executable
 $(go env GOPATH)/bin/dcrwages
