@@ -2,9 +2,10 @@ package server
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/jholdstock/dcrwages/model"
 )
@@ -47,13 +48,13 @@ func jsonError(httpStatus int, err string, c *gin.Context) {
 		})
 }
 
-// Return all available data, json encoded
+// Return all available data, json encoded.
 func getAllData(c *gin.Context) {
 	c.JSON(http.StatusOK,
 		model.FullHistory)
 }
 
-// Return a single year, json encoded
+// Return a single year, json encoded.
 func getYear(c *gin.Context) {
 	yearParam, err := getIntParam("year", c)
 	if err != nil {
@@ -70,7 +71,7 @@ func getYear(c *gin.Context) {
 		year)
 }
 
-// Return a single month, json encoded
+// Return a single month, json encoded.
 func getMonth(c *gin.Context) {
 	yearParam, err := getIntParam("year", c)
 	if err != nil {

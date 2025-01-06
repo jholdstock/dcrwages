@@ -146,7 +146,7 @@ var poloPrices = map[int]map[int]float64{
 const binanceURL = "https://api.binance.com"
 const httpTimeout = time.Second * 10
 
-// GetMonthAverage returns the average USD/DCR price for a given month
+// GetMonthAverage returns the average USD/DCR price for a given month.
 func GetMonthAverage(month time.Month, year int) (float64, error) {
 	startTime := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
 	endTime := startTime.AddDate(0, 1, 0)
@@ -167,7 +167,7 @@ func GetMonthAverage(month time.Month, year int) (float64, error) {
 	// Download prices from Binance.
 	prices, err := getPrices(unixStart, unixEnd)
 	if err != nil {
-		return 0, fmt.Errorf("getPrices: %v", err)
+		return 0, fmt.Errorf("getPrices: %w", err)
 	}
 
 	// Calculate and return the average of all prices.
@@ -183,7 +183,7 @@ func GetMonthAverage(month time.Month, year int) (float64, error) {
 // getPrices contacts the Binance API to download the hourly DCR/USDT price data
 // for a given datetime range. Returns a map of unix timestamp => average price.
 func getPrices(startDate int64, endDate int64) (map[uint64]float64, error) {
-	// Construct HTTP request and set parameters
+	// Construct HTTP request and set parameters.
 	req, err := http.NewRequest(http.MethodGet, binanceURL+"/api/v1/klines", nil)
 	if err != nil {
 		return nil, err
@@ -195,19 +195,19 @@ func getPrices(startDate int64, endDate int64) (map[uint64]float64, error) {
 	q.Set("startTime", strconv.FormatInt(startDate*1000, 10))
 	q.Set("endTime", strconv.FormatInt(endDate*1000, 10))
 
-	// Request 1 hour intervals since there is a 1000 point limit on requests
-	// 31 Days * 24 Hours = 720 data points
+	// Request 1 hour intervals since there is a 1000 point limit on requests.
+	// 31 Days * 24 Hours = 720 data points.
 	q.Set("interval", "1h")
 	q.Set("limit", "1000")
 
 	req.URL.RawQuery = q.Encode()
 
-	// Create HTTP client,
+	// Create HTTP client.
 	httpClient := http.Client{
 		Timeout: httpTimeout,
 	}
 
-	// Send HTTP request
+	// Send HTTP request.
 	resp, err := httpClient.Do(req)
 	if err != nil {
 		return nil, err
@@ -217,7 +217,7 @@ func getPrices(startDate int64, endDate int64) (map[uint64]float64, error) {
 
 	var chartData [][]json.RawMessage
 
-	// Read response and deserialise JSON into [][]json.RawMessage
+	// Read response and deserialise JSON into [][]json.RawMessage.
 	decoder := json.NewDecoder(resp.Body)
 	err = decoder.Decode(&chartData)
 	if err != nil {
@@ -250,7 +250,7 @@ func getPrices(startDate int64, endDate int64) (map[uint64]float64, error) {
 		if err != nil {
 			return nil, err
 		}
-		// Create a map of unix timestamps => average price
+		// Create a map of unix timestamps => average price.
 		prices[openTime/1000] = (high + low) / 2
 	}
 	return prices, nil

@@ -1,9 +1,9 @@
 # builder image
-FROM golang:1.20
+FROM golang:1.22
 
 LABEL description="dcrwages"
 LABEL version="1.0"
-LABEL maintainer "holdstockjamie@gmail.com"
+LABEL maintainer="holdstockjamie@gmail.com"
 
 USER root
 RUN mkdir /app
@@ -11,6 +11,6 @@ COPY . /app
 WORKDIR /app
 RUN go build .
 
-ENV GIN_MODE release
+ENV GIN_MODE="release"
 EXPOSE 3000
 CMD ["/app/dcrwages"]

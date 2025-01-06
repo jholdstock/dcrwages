@@ -1,0 +1,42 @@
+run:
+  deadline: 10m
+
+linters:
+  disable-all: true
+  enable:
+    - asciicheck
+    - bidichk
+    - containedctx
+    - dupword
+    - durationcheck
+    - errcheck
+    - errchkjson
+    - errorlint
+    - exhaustive
+    - copyloopvar
+    - fatcontext
+    - goconst
+    - godot
+    - gofmt
+    - goimports
+    - gosimple
+    - govet
+    - ineffassign
+    - makezero
+    - mirror
+    - misspell
+    - nilerr
+    - nilnil
+    - nosprintfhostport
+    - prealloc
+    - predeclared
+    - reassign
+    - revive
+    - staticcheck
+    - tenv
+    - tparallel
+    - typecheck
+    - unconvert
+    - usestdlibvars
+    - unparam
+    - unused

@@ -5,7 +5,7 @@ import (
 )
 
 // NewRouter initialises a router with routes implementing
-// a RESTful HTTP service returning JSON encoded price data
+// a RESTful HTTP service returning JSON encoded price data.
 func NewRouter() *gin.Engine {
 	router := gin.Default()
 	router.Static("/public", "./public/")

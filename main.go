@@ -17,10 +17,10 @@ const refreshRate = 30 * time.Minute
 const listen = ":3000"
 
 func main() {
-	// Load data model
+	// Load data model.
 	go model.Init(earliestMonth, earliestYear)
 
-	// Start a ticker to update data model
+	// Start a ticker to update data model.
 	ticker := time.NewTicker(refreshRate)
 	go func() {
 		for {
@@ -29,7 +29,7 @@ func main() {
 		}
 	}()
 
-	// Start HTTP server
+	// Start HTTP server.
 	log.Printf("Listening on %s", listen)
 	log.Fatal(server.NewRouter().Run(listen))
 }
