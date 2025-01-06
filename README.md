@@ -24,10 +24,15 @@ markets were used to find monthly average USDT/DCR prices.
 This historic data is now hard-coded in dcrwages - the Poloniex API is no longer
 used by this project.
 
-### Since April 2019
+### April 2019 - November 2024
 
 The price calculation was updated to use [Binance](https://binance.com) instead
 of Poloniex, and the interval was changed from 15 minutes to 1 hour.
+
+### Since December 2024
+
+The [Binance](https://binance.com) DCR/USDT market is now used to find the
+monthly average price instead of the DCR/BTC and BTC/USDT markets.
 
 ## How to use dcrwages
 
