@@ -213,7 +213,7 @@ func getPrices(startDate int64, endDate int64) (map[uint64]float64, error) {
 		return nil, err
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var chartData [][]json.RawMessage
 

@@ -1,5 +1,5 @@
 # builder image
-FROM golang:1.22
+FROM golang:1.26
 
 LABEL description="dcrwages"
 LABEL version="1.0"
